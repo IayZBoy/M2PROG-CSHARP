@@ -1,6 +1,6 @@
 namespace console
 {
-    class other
+    class Other
     {   
         internal void print(string msg)
         {
@@ -15,15 +15,17 @@ namespace console
     class Program
     {
         private void printhello() {
-            other o = new other();
+            Other o = new Other();
             o.print("hello");
         }
 
         static void Main(string[] args)
         {
-            other o = new other();
+            Other o = new Other();
             o.print("hello");
             o.printhi();
+            Program p = new Program();
+            p.printhello();
         }
     }
 }
