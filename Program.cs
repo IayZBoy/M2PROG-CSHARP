@@ -5,7 +5,7 @@ namespace ConsoleApp
 {
     class ListManager
     {
-        private List<string> list = new List<string>();
+        private List<object> list = new List<object>();
 
         internal void Add(string item)
         {
@@ -26,7 +26,7 @@ namespace ConsoleApp
         internal void PrintAll(Action<string> printAction)
         {
             foreach (var item in list)
-                printAction(item);
+                printAction(item.ToString() ?? "nil");
         }
 
         internal void PrintCount(Action<string> printAction)
@@ -39,12 +39,12 @@ namespace ConsoleApp
             return list.IndexOf(item);
         }
 
-        internal List<string> GetList()
+        internal List<object> GetList()
         {
             return list;
         }
 
-        internal void SetList(List<string> list)
+        internal void SetList(List<object> list)
         {
             this.list = list;
         }
