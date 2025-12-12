@@ -23,53 +23,6 @@ namespace ConsoleApp
         }
     }
 
-    class ListManager
-    {
-        private List<object> list = new List<object>();
-
-        internal void Add(object item)
-        {
-            list.Add(item);
-        }
-
-        internal void Remove(int index)
-        {
-            if (index >= 0 && index < list.Count)
-                list.RemoveAt(index);
-        }
-
-        internal void Clear()
-        {
-            list.Clear();
-        }
-
-        internal void PrintAll(Action<object> printAction)
-        {
-            foreach (var item in list)
-                printAction(item.ToString() ?? "nil");
-        }
-
-        internal void PrintCount(Action<object> printAction)
-        {
-            printAction(list.Count.ToString());
-        }
-
-        internal int GetIndex(object item)
-        {
-            return list.IndexOf(item);
-        }
-
-        internal List<object> GetList()
-        {
-            return list;
-        }
-
-        internal void SetList(List<object> list)
-        {
-            this.list = list;
-        }
-    }
-
     class Other
     {
         private bool active;
