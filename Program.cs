@@ -43,6 +43,11 @@ namespace ConsoleApp
         {
             return list;
         }
+
+        internal void SetList(List<string> list)
+        {
+            this.list = list;
+        }
     }
 
     class Other
