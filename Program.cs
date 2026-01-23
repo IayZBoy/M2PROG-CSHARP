@@ -19,48 +19,56 @@ namespace ConsoleApp
 
     class Program
     {
+        private List<Currency> Currencies = new List<Currency>();
+        private Dictionary<string, Currency> CurrencyDict = new Dictionary<string, Currency>();
+
+        internal void AddCurrency(Currency c)
+        {
+            Currencies.Add(c);
+            CurrencyDict.Add(c.Type, c);
+            Console.WriteLine(c.Type + " added");
+        }
+
+        internal void RemoveCurrency(Currency c)
+        {
+            Currencies.Remove(c);
+            CurrencyDict.Remove(c.Type);
+            Console.WriteLine(c.Type + " removed");
+        }
+
         static void Main(string[] args)
         {
-            List<Currency> Currencies = new List<Currency>();
-            Dictionary<string, Currency> CurrencyDict = new Dictionary<string, Currency>();
+            Program program = new Program();
 
-            void AddCurrency(Currency c)
-            {
-                Currencies.Add(c);
-                CurrencyDict[c.Type] = c;
-            }
+            program.AddCurrency(new Currency("USD", 1.2));
+            program.AddCurrency(new Currency("EUR", 1.0));
+            program.AddCurrency(new Currency("RUB", 0.011));
 
-            AddCurrency(new Currency("USD", 1.2));
-            AddCurrency(new Currency("EUR", 1.0));
-            AddCurrency(new Currency("RUB", 0.011));
-
-            foreach (Currency currency in Currencies)
+            foreach (Currency currency in program.Currencies)
             {
                 Console.WriteLine(currency.Type + ": " + currency.Value);
             }
 
-            if (CurrencyDict.ContainsKey("EUR"))
+            if (program.CurrencyDict.ContainsKey("EUR"))
             {
-                CurrencyDict["EUR"].Value = 1.1;
+                program.CurrencyDict["EUR"].Value = 1.1;
             }
 
-            for (int i = 0; i < Currencies.Count; i++)
+            for (int i = 0; i < program.Currencies.Count; i++)
             {
-                if (Currencies[i].Type == "RUB")
+                if (program.Currencies[i].Type == "RUB")
                 {
-                    CurrencyDict.Remove(Currencies[i].Type);
-                    Currencies.RemoveAt(i);
-                    Console.WriteLine("RUB removed");
+                    program.RemoveCurrency(program.Currencies[i]);
                     break;
                 }
             }
 
-            foreach (Currency currency in Currencies)
+            foreach (Currency currency in program.Currencies)
             {
                 Console.WriteLine(currency.Type + ": " + currency.Value);
             }
 
-            string json = JsonSerializer.Serialize(Currencies);
+            string json = JsonSerializer.Serialize(program.Currencies);
             File.WriteAllText("Currencies.json", json);
         }
     }
