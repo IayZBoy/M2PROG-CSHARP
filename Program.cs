@@ -1,93 +1,67 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace ConsoleApp
 {
-    class Value
+    class Currency
     {
-        internal bool active;
-        internal object? item;
-        internal object? name;
+        public string Type { get; set; } = "EUR";
+        public double Value { get; set; } = 1.0;
 
-        internal object? getValue()
+        internal Currency(string Type, double Value)
         {
-            if (active)
-                return item;
-            else
-                return "Item \"" + item + "\" is not active";
-        }
-
-        internal object? getName()
-        {
-            return name;
-        }
-    }
-
-    class Other
-    {
-        private bool active;
-
-        internal void Print(string msg)
-        {
-            Console.WriteLine(msg);
-        }
-
-        internal void PrintHi()
-        {
-            Print("hi");
-        }
-
-        internal void SetActive(bool active)
-        {
-            this.active = active;
-        }
-
-        internal bool GetActive()
-        {
-            return active;
+            this.Type = Type;
+            this.Value = Value;
         }
     }
 
     class Program
     {
-        private void PrintHello()
-        {
-            Other o = new Other();
-            o.Print("hello");
-        }
-
-        private void PrintActive()
-        {
-            Other o = new Other();
-            o.Print(o.GetActive().ToString());
-        }
-
         static void Main(string[] args)
         {
-            Other o = new Other();
-            o.Print("hello");
-            o.PrintHi();
+            List<Currency> Currencies = new List<Currency>();
+            Dictionary<string, Currency> CurrencyDict = new Dictionary<string, Currency>();
 
-            Program p = new Program();
-            p.PrintHello();
-
-            o.SetActive(true);
-            p.PrintActive();
-
-            o.SetActive(false);
-            p.PrintActive();
-
-            List<Value> values = new List<Value>
+            void AddCurrency(Currency c)
             {
-                new Value { active = true, item = "a" },
-                new Value { active = false, item = "b" },
-                new Value { active = true, item = "c" }
-            };
+                Currencies.Add(c);
+                CurrencyDict[c.Type] = c;
+            }
 
-            List<Value> inactives = values.Where(x => !x.active).ToList();
+            AddCurrency(new Currency("USD", 1.2));
+            AddCurrency(new Currency("EUR", 1.0));
+            AddCurrency(new Currency("RUB", 0.011));
 
-            foreach (var value in inactives)
-                Console.WriteLine(value.getName() + ": " + value.getValue());
+            foreach (Currency currency in Currencies)
+            {
+                Console.WriteLine(currency.Type + ": " + currency.Value);
+            }
+
+            if (CurrencyDict.ContainsKey("EUR"))
+            {
+                CurrencyDict["EUR"].Value = 1.1;
+            }
+
+            for (int i = 0; i < Currencies.Count; i++)
+            {
+                if (Currencies[i].Type == "RUB")
+                {
+                    CurrencyDict.Remove(Currencies[i].Type);
+                    Currencies.RemoveAt(i);
+                    Console.WriteLine("RUB removed");
+                    break;
+                }
+            }
+
+            foreach (Currency currency in Currencies)
+            {
+                Console.WriteLine(currency.Type + ": " + currency.Value);
+            }
+
+            string json = JsonSerializer.Serialize(Currencies);
+            File.WriteAllText("Currencies.json", json);
         }
     }
 }
